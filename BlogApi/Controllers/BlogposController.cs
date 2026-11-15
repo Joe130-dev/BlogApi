@@ -25,5 +25,30 @@ namespace BlogApi.Controllers
 
             return Ok(bejegyzesek);
         }
+
+        // Új blogbejegyzés létrehozása
+        [HttpPost]
+        public async Task<ActionResult<Blogpost>> UjBejegyzes(Blogpost ujBejegyzes)
+        {
+            // Ellenőrizzük, hogy létezik-e a megadott blogger
+            bool bloggerLetezik = await adatbazis.Bloggerek
+                .AnyAsync(blogger => blogger.Id == ujBejegyzes.BlogId);
+
+            if (!bloggerLetezik)
+            {
+                return BadRequest("A megadott blogger nem létezik.");
+            }
+
+            // A bejegyzés létrehozási idejének beállítása
+            ujBejegyzes.PostTime = DateTime.Now;
+            ujBejegyzes.UpdateTime = DateTime.Now;
+
+            // Új bejegyzés mentése az adatbázisba
+            adatbazis.Blogpostok.Add(ujBejegyzes);
+            await adatbazis.SaveChangesAsync();
+
+            return StatusCode(201, ujBejegyzes);
+        }
+
     }
 }
