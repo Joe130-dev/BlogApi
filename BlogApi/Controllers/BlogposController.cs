@@ -137,7 +137,27 @@ namespace BlogApi.Controllers
             });
         }
 
+        // Egy adott blogger blogbejegyzéseinek megszámlálása
+        [HttpGet("blogger/{azonosito}/darabszam")]
+        public async Task<IActionResult> BloggerBejegyzesekSzama(int azonosito)
+        {
+            // Ellenőrizzük, hogy létezik-e a blogger
+            var blogger = await adatbazis.Bloggerek.FindAsync(azonosito);
 
+            if (blogger == null)
+            {
+                return NotFound("A megadott blogger nem található.");
+            }
 
+            // Megszámoljuk a bloggerhez tartozó bejegyzéseket
+            int bejegyzesekSzama = await adatbazis.Blogpostok
+                .CountAsync(bejegyzes => bejegyzes.BlogId == azonosito);
+
+            return Ok(new
+            {
+                BloggerNev = blogger.Name,
+                BejegyzesekSzama = bejegyzesekSzama
+            });
+        }
     }
 }
