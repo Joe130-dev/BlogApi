@@ -25,5 +25,19 @@ namespace BlogApi.Controllers
 
             return Ok(bloggerek);
         }
+        // Új blogger regisztrálása
+        [HttpPost]
+        public async Task<ActionResult<Blogger>> UjBlogger(Blogger ujBlogger)
+        {
+            adatbazis.Bloggerek.Add(ujBlogger);
+
+            await adatbazis.SaveChangesAsync();
+
+            return CreatedAtAction(
+                nameof(OsszesBlogger),
+                new { id = ujBlogger.Id },
+                ujBlogger
+            );
+        }
     }
 }
