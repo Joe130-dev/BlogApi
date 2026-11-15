@@ -104,5 +104,27 @@ namespace BlogApi.Controllers
             return NoContent();
         }
 
+        // Egy blogger nevének és összes bejegyzésének lekérdezése
+        // INNER JOIN a blogger és blogpost táblák között
+        [HttpGet("blogger-bejegyzesei/{azonosito}")]
+        public async Task<IActionResult> BloggerBejegyzesei(int azonosito)
+        {
+            var bejegyzesek = await (
+                from blogger in adatbazis.Bloggerek
+                join bejegyzes in adatbazis.Blogpostok
+                    on blogger.Id equals bejegyzes.BlogId
+                where blogger.Id == azonosito
+                select new
+                {
+                    BloggerNev = blogger.Name,
+                    BejegyzesCim = bejegyzes.Title,
+                    BejegyzesTartalom = bejegyzes.Content
+                }
+            ).ToListAsync();
+
+            return Ok(bejegyzesek);
+        }
+
+
     }
 }
