@@ -92,5 +92,13 @@ namespace BlogApi.Controllers
 
             return NoContent();
         }
+        // Regisztrált bloggerek számának lekérdezése
+        [HttpGet("darabszam")]
+        public async Task<ActionResult<int>> BloggerekDarabszama()
+        {
+            int bloggerekSzama = await adatbazis.Bloggerek.CountAsync();
+
+            return Ok(bloggerekSzama);
+        }
     }
 }
