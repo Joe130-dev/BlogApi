@@ -52,5 +52,45 @@ namespace BlogApi.Controllers
 
             return Ok(blogger);
         }
+        // Meglévő blogger adatainak módosítása
+        [HttpPut("{id}")]
+        public async Task<IActionResult> BloggerModositasa(int id, Blogger modositottBlogger)
+        {
+            // Blogger megkeresése az adatbázisban
+            var blogger = await adatbazis.Bloggerek.FindAsync(id);
+
+            if (blogger == null)
+            {
+                return NotFound("A megadott azonosítóval nem található blogger.");
+            }
+
+            // Meglévő adatok frissítése
+            blogger.Name = modositottBlogger.Name;
+            blogger.Email = modositottBlogger.Email;
+            blogger.Age = modositottBlogger.Age;
+            blogger.Password = modositottBlogger.Password;
+            blogger.RegistrationTime = modositottBlogger.RegistrationTime;
+
+            // Változtatások mentése
+            await adatbazis.SaveChangesAsync();
+
+            return NoContent();
+        }
+        // Blogger törlése azonosító alapján
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> BloggerTorlese(int id)
+        {
+            var blogger = await adatbazis.Bloggerek.FindAsync(id);
+
+            if (blogger == null)
+            {
+                return NotFound();
+            }
+
+            adatbazis.Bloggerek.Remove(blogger);
+            await adatbazis.SaveChangesAsync();
+
+            return NoContent();
+        }
     }
 }
