@@ -82,8 +82,27 @@ namespace BlogApi.Controllers
             await adatbazis.SaveChangesAsync();
 
             return NoContent();
+
         }
 
+        // Blogbejegyzés törlése azonosító alapján
+        [HttpDelete("{azonosito}")]
+        public async Task<IActionResult> BejegyzesTorlese(int azonosito)
+        {
+            // Megkeressük a törlendő bejegyzést
+            var bejegyzes = await adatbazis.Blogpostok.FindAsync(azonosito);
+
+            if (bejegyzes == null)
+            {
+                return NotFound("A megadott blogbejegyzés nem található.");
+            }
+
+            // Bejegyzés törlése az adatbázisból
+            adatbazis.Blogpostok.Remove(bejegyzes);
+            await adatbazis.SaveChangesAsync();
+
+            return NoContent();
+        }
 
     }
 }
