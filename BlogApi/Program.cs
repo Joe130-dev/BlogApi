@@ -1,4 +1,4 @@
-
+using Scalar.AspNetCore;
 namespace BlogApi
 {
     public class Program
@@ -15,11 +15,16 @@ namespace BlogApi
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
+
             if (app.Environment.IsDevelopment())
             {
+                // OpenAPI dokumentáció létrehozása
                 app.MapOpenApi();
+
+                // Scalar grafikus API-tesztfelület
+                app.MapScalarApiReference();
             }
+
 
             app.UseHttpsRedirection();
 

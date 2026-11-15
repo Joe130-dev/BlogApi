@@ -1,0 +1,18 @@
+﻿
+using Microsoft.EntityFrameworkCore;
+using BlogApi.Models;
+
+namespace BlogApi.Data
+{
+    public class BlogContext : DbContext
+    {
+        // Az adatbázis-kapcsolat beállításainak átvétele
+        public BlogContext(DbContextOptions<BlogContext> beallitasok)
+            : base(beallitasok)
+        {
+        }
+
+        // A MySQL blogger táblájának elérése
+        public DbSet<Blogger> Bloggerek { get; set; }
+    }
+}
