@@ -125,6 +125,19 @@ namespace BlogApi.Controllers
             return Ok(bejegyzesek);
         }
 
+        // Az adatbázisban található összes blogbejegyzés száma
+        [HttpGet("darabszam")]
+        public async Task<IActionResult> BejegyzesekDarabszama()
+        {
+            int bejegyzesekSzama = await adatbazis.Blogpostok.CountAsync();
+
+            return Ok(new
+            {
+                OsszesBejegyzes = bejegyzesekSzama
+            });
+        }
+
+
 
     }
 }
