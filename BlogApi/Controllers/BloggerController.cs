@@ -100,5 +100,24 @@ namespace BlogApi.Controllers
 
             return Ok(bloggerekSzama);
         }
+
+        // Egy adott blogger nevének és e-mail-címének lekérdezése
+        [HttpGet("{azonosito}/nev-email")]
+        public async Task<IActionResult> BloggerNevEmail(int azonosito)
+        {
+            var blogger = await adatbazis.Bloggerek.FindAsync(azonosito);
+
+            if (blogger == null)
+            {
+                return NotFound("A megadott blogger nem található.");
+            }
+
+            return Ok(new
+            {
+                blogger.Name,
+                blogger.Email
+            });
+        }
+
     }
 }
