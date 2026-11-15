@@ -39,5 +39,18 @@ namespace BlogApi.Controllers
                 ujBlogger
             );
         }
+        // Egy blogger lekérdezése azonosító alapján
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Blogger>> BloggerIdAlapjan(int id)
+        {
+            var blogger = await adatbazis.Bloggerek.FindAsync(id);
+
+            if (blogger == null)
+            {
+                return NotFound("A megadott azonosítóval nem található blogger.");
+            }
+
+            return Ok(blogger);
+        }
     }
 }
