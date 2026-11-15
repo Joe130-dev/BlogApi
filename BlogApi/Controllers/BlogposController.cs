@@ -50,5 +50,40 @@ namespace BlogApi.Controllers
             return StatusCode(201, ujBejegyzes);
         }
 
+        // Meglévő blogbejegyzés módosítása
+        [HttpPut("{azonosito}")]
+        public async Task<IActionResult> BejegyzesModositasa(
+            int azonosito, Blogpost modositottBejegyzes)
+        {
+            // Megkeressük a módosítandó bejegyzést
+            var bejegyzes = await adatbazis.Blogpostok.FindAsync(azonosito);
+
+            if (bejegyzes == null)
+            {
+                return NotFound("A megadott blogbejegyzés nem található.");
+            }
+
+            // Ellenőrizzük, hogy létezik-e a megadott blogger
+            bool bloggerLetezik = await adatbazis.Bloggerek
+                .AnyAsync(blogger => blogger.Id == modositottBejegyzes.BlogId);
+
+            if (!bloggerLetezik)
+            {
+                return BadRequest("A megadott blogger nem létezik.");
+            }
+
+            // A bejegyzés adatainak frissítése
+            bejegyzes.Title = modositottBejegyzes.Title;
+            bejegyzes.Content = modositottBejegyzes.Content;
+            bejegyzes.BlogId = modositottBejegyzes.BlogId;
+            bejegyzes.UpdateTime = DateTime.Now;
+
+            // A módosítások mentése
+            await adatbazis.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+
     }
 }
