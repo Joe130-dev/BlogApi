@@ -25,19 +25,7 @@ namespace BlogApi
             );
 
             var app = builder.Build();
-            // MySQL-adatbázis kapcsolatának ellenőrzése
-            using (var hatokor = app.Services.CreateScope())
-            {
-                var adatbazis = hatokor.ServiceProvider.GetRequiredService<BlogContext>();
-
-                Console.WriteLine(
-                    adatbazis.Database.CanConnect()
-                        ? "Sikeres MySQL-kapcsolat!"
-                        : "Nem sikerült csatlakozni a MySQL-adatbázishoz!"
-                );
-            }
-
-
+           
             if (app.Environment.IsDevelopment())
             {
                 // OpenAPI dokumentáció létrehozása
